@@ -153,6 +153,7 @@
                             <!-- Fix for "java.lang.reflect.InaccessibleObjectException: Unable to make field private final java.util.Map java.util.Collections$UnmodifiableMap.m accessible: module java.base does not "opens java.util" to unnamed module @75eeccf5" -->
                             <!-- Use ParallelGC for tests to avoid G1 GC which is the default in JDK 21 -->
                             <argLine>
+                                @{argLine}
                                 --add-opens=java.base/java.util=ALL-UNNAMED
                                 -Djdk.attach.allowAttachSelf
                                 -XX:+UseParallelGC
