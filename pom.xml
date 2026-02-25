@@ -153,6 +153,7 @@
                             <!-- Fix for "java.lang.reflect.InaccessibleObjectException: Unable to make field private final java.util.Map java.util.Collections$UnmodifiableMap.m accessible: module java.base does not "opens java.util" to unnamed module @75eeccf5" -->
                             <!-- Use ParallelGC for tests to avoid G1 GC which is the default in JDK 21 -->
                             <argLine>
+                                @{argLine}
                                 --add-opens=java.base/java.util=ALL-UNNAMED
                                 -Djdk.attach.allowAttachSelf
                                 -XX:+UseParallelGC
@@ -277,6 +278,13 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
                 <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
                     <compilerArgs>
                         <arg>-Xlint:deprecation</arg>
                         <arg>-Xlint:unchecked</arg>
@@ -291,6 +299,7 @@
                     <!-- allowAttachSelf required for tests in jdk9+ ref https://bugs.openjdk.org/browse/JDK-8180425 -->
                     <!-- rmi.server.hostname required for tests in some MacOS configurations -->
                     <argLine>
+                        @{argLine}
                         -Djdk.attach.allowAttachSelf
                         -Djava.rmi.server.hostname=localhost
                     </argLine>
@@ -407,6 +416,26 @@
                 <configuration>
                     <skip>true</skip>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.11</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
